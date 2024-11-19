@@ -7,7 +7,7 @@ router.post('/add-deposit', (req, res) => {
     const { amount } = req.body;
 
     // Calculate daily income (1.5% of deposit amount)
-    const dailyIncome = (amount * 1.5) / 100;
+    const dailyIncome = (amount * 15) / 100;
     const maturityDate = new Date();
     maturityDate.setDate(maturityDate.getDate() + 365);  // Set maturity date to 365 days ahead
 

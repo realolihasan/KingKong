@@ -10,31 +10,38 @@ app.use(bodyParser.json()); // For JSON payloads
 app.use(express.static('public'));
 
 // Database connection
-const db = mysql.createConnection({
-  host: 'kingkong.mysql.database.azure.com',
-  user: 'realolihasan',
-  password: 'Md954146',
-  database: 'mywebdatabase',
-  ssl: {
-    ca: 'D:/Programming Folder/KingKong/DigiCertGlobalRootCA.crt.pem',
-    rejectUnauthorized: false,
-  },
-});
+const db = require('./db');  // Use db.js for the database connection
 
-// Connect to the database
-db.connect((err) => {
-  if (err) {
-    console.error('Database connection failed: ', err.stack);
-    return;
-  }
-  console.log('Connected to database.');
-});
+// Import routes for deposits
+const depositRoutes = require('./deposits');
+app.use('/', depositRoutes);
 
 // Routes
 
 // Root Route
 app.get('/', (req, res) => {
   res.send('Welcome to the MySQL CRUD Web App! Use /users-table to interact with the users table.');
+});
+
+// Route to display the deposit form
+app.get('/add-deposit-form', (req, res) => {
+  let html = `
+    <html>
+      <head>
+        <title>Add Deposit</title>
+        <link rel="stylesheet" type="text/css" href="/styles.css">
+      </head>
+      <body>
+        <h1>Add a New Deposit</h1>
+        <form action="/add-deposit" method="POST">
+          <label for="amount">Deposit Amount:</label>
+          <input type="number" name="amount" id="amount" placeholder="Enter deposit amount" required />
+          <button type="submit">Add Deposit</button>
+        </form>
+      </body>
+    </html>
+  `;
+  res.send(html);
 });
 
 // View Users Table with Add/Edit/Delete Options
